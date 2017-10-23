@@ -13,3 +13,11 @@ someServer:
 # Versions
 
 Versions always follow `deployer/deployer` and are compatible with the respective major.minor version.
+
+# Opcache Clear
+
+For cgi-fcgi (used by the opcache clear script) to work, the below package needs to be installed on Ubuntu-based systems
+
+```
+apt-get install libfcgi0ldbl
+```
