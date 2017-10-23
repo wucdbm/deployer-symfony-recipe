@@ -169,7 +169,12 @@ function sendSlackMessage(array $config) {
 
     $response = @json_decode($result);
 
-    if (!$response || isset($response->error)) {
-        throw new \RuntimeException($response->error);
+    if (!$response) {
+        throw new \RuntimeException(sprintf('Slack returned bad Response: %s', $result));
     }
+
+    if (isset($response->error)) {
+        throw new \RuntimeException(sprintf('Slack error: %s', $response->error));
+    }
+
 }
