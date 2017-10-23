@@ -12,6 +12,41 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 option('symfony_env', 'e', InputOption::VALUE_OPTIONAL, 'Environment to run commands in');
 option('deploy-ask', 'a', InputOption::VALUE_OPTIONAL, 'Ask what to deploy');
 
+$start = new \DateTime();
+
+// Display Time Elapsed once done
+task('deploy:time_elapsed', function () use ($start) {
+    $end = new \DateTime();
+    $diff = $end->diff($start);
+    output()->writeln(sprintf('<info>Total Time Elapsed: %sm %ss</info>', $diff->i, $diff->s));
+});
+
+after('deploy', 'deploy:time_elapsed');
+
+// Display a System Notification if Slack is not enabled
+task('notification:system', function () use ($start) {
+    if (get('slack_webhook')) {
+        // Do not display the system notification if slack web hook is configured
+        return;
+    }
+
+    if (!get('slack_skip_notification')) {
+        // Do not display the system notification if slack notification is configured
+        return;
+    }
+
+    $end = new \DateTime();
+    $diff = $end->diff($start);
+    $title = sprintf('Successfully deployed to %s!', get('hostname'));
+    $messages = [
+        sprintf('Successfully deployed %s (%s) to %s!', get('branch'), get('tagMessage'), get('hostname')),
+        sprintf('Total Time Elapsed: %sm %ss', $diff->i, $diff->s)
+    ];
+    exec(sprintf('export DISPLAY=:0; notify-send "%s" "%s"', $title, implode("\n", $messages)));
+});
+
+after('success', 'notification:system');
+
 // Ask Tag/Branch questions before deployment and setup Slack variables
 task('deploy:before', function () {
     /** @var Host $server */
@@ -202,41 +237,6 @@ before('deploy', 'deploy:before');
 task('deploy:assets:install', function () {
     run('{{bin/php}} {{bin/console}} assets:install {{console_options}} --symlink {{release_path}}/web');
 })->desc('Install bundle assets');
-
-// system notifications library?
-
-$start = new \DateTime();
-
-task('deploy:time_elapsed', function () use ($start) {
-    $end = new \DateTime();
-    $diff = $end->diff($start);
-    output()->writeln(sprintf('<info>Total Time Elapsed: %sm %ss</info>', $diff->i, $diff->s));
-});
-
-after('success', 'deploy:time_elapsed');
-
-task('notification:system', function () use ($start) {
-    if (get('slack_webhook')) {
-        // Do not display the system notification if slack web hook is configured
-        return;
-    }
-
-    if (!get('slack_skip_notification')) {
-        // Do not display the system notification if slack notification is configured
-        return;
-    }
-
-    $end = new \DateTime();
-    $diff = $end->diff($start);
-    $title = sprintf('Successfully deployed to %s!', get('hostname'));
-    $messages = [
-        sprintf('Successfully deployed %s (%s) to %s!', get('branch'), get('tagMessage'), get('hostname')),
-        sprintf('Total Time Elapsed: %sm %ss', $diff->i, $diff->s)
-    ];
-    exec(sprintf('export DISPLAY=:0; notify-send "%s" "%s"', $title, implode("\n", $messages)));
-});
-
-after('success', 'notification:system');
 
 task('status', function () {
     // todo last commit message on branch, message on tag
