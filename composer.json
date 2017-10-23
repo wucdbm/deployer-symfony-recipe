@@ -19,6 +19,10 @@
         }
     ],
     "minimum-stability": "stable",
+    "require": {
+        "php": "~7.1",
+        "deployer/deployer": "~6.0"
+    },
     "autoload": {
         "files": [
             "autoload.php"

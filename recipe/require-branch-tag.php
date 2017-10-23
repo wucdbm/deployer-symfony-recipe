@@ -25,12 +25,12 @@ after('deploy', 'deploy:time_elapsed');
 
 // Display a System Notification if Slack is not enabled
 task('notification:system', function () use ($start) {
-    if (get('slack_webhook')) {
+    if (has('slack_webhook') && get('slack_webhook')) {
         // Do not display the system notification if slack web hook is configured
         return;
     }
 
-    if (!get('slack_skip_notification')) {
+    if (has('slack_skip_notification') && !get('slack_skip_notification')) {
         // Do not display the system notification if slack notification is configured
         return;
     }
