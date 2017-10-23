@@ -1,0 +1,27 @@
+{
+    "name": "wucdbm/deployer-symfony-recipe",
+    "description": "A Highly Opinionated Symfony3/4 Deployer Recipe",
+    "type": "library",
+    "keywords": [
+        "deployer",
+        "symfony",
+        "recipe",
+        "deploy",
+        "deployment",
+        "slack"
+    ],
+    "homepage": "https://github.com/wucdbm/deployer-symfony-recipe",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Martin Kirilov",
+            "email": "wucdbm@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "autoload": {
+        "files": [
+            "autoload.php"
+        ]
+    }
+}
