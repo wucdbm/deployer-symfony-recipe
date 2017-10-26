@@ -35,11 +35,15 @@ task('notification:system', function () use ($start) {
         return;
     }
 
+    if (has('disable_system_notification') && get('disable_system_notification')) {
+        return;
+    }
+
     $end = new \DateTime();
     $diff = $end->diff($start);
     $title = sprintf('Successfully deployed to %s!', get('hostname'));
     $messages = [
-        sprintf('Successfully deployed %s (%s) to %s!', get('branch'), get('tagMessage'), get('hostname')),
+        sprintf('Successfully deployed %s (%s) to %s!', get('branch'), get('release.summary'), get('hostname')),
         sprintf('Total Time Elapsed: %sm %ss', $diff->i, $diff->s)
     ];
     exec(sprintf('export DISPLAY=:0; notify-send "%s" "%s"', $title, implode("\n", $messages)));
@@ -67,11 +71,11 @@ task('deploy:before', function () {
     if ($branch = $input->getOption('branch')) {
         // Slack BC
         set('branch', $branch);
-        set('slack.release', sprintf('Branch %s', $branch)); // todo get last ref for branch from git?
+        set('release.summary', sprintf('Branch %s', $branch)); // todo get last ref for branch from git?
     } elseif ($tag = $input->getOption('tag')) {
         // Slack BC
         set('branch', $tag);
-        set('slack.release', sprintf('Tag %s', $tag)); // todo get msg for tag from git?
+        set('release.summary', sprintf('Tag %s', $tag)); // todo get msg for tag from git?
     } elseif ('b' == $input->getOption('deploy-ask')) {
         requireBranch($input, $output);
     } elseif ('t' == $input->getOption('deploy-ask')) {
@@ -173,7 +177,7 @@ function requireTag(InputInterface $input, OutputInterface $output): string {
 
     // Slack BC
     set('branch', $tag);
-    set('slack.release', $choices[$tag]);
+    set('release.summary', $choices[$tag]);
 
     $output->writeln(sprintf('Will deploy git tag <info>%s</info>', $tag));
 
@@ -224,7 +228,7 @@ function requireBranch(InputInterface $input, OutputInterface $output) {
 
     // Slack BC
     set('branch', $branch);
-    set('slack.release', $choices[$branch]);
+    set('release.summary', $choices[$branch]);
 
     $output->writeln(sprintf('Will deploy git branch <info>%s</info>', $branch));
 

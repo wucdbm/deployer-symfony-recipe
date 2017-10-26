@@ -14,8 +14,8 @@ set('slack_color', function () {
     return '#4d91f7';
 });
 
-set('slack_text', "*{{user.name}}* _<{{user.email}}>_ has initiated a deployment\nTarget: *{{target}}*\nRelease: *{{branch}}* - _{{slack.release}}_");
+set('slack_text', "*{{user.name}}* _<{{user.email}}>_ has initiated a deployment\nTarget: *{{target}}*\nRelease: *{{branch}}* - _{{release.summary}}_");
 after('deploy:lock', 'slack:notify');
 
-set('slack_success_text', "*{{user.name}}* _<{{user.email}}>_ has deployed successfully!\nTarget: *{{target}}*\nRelease: *{{branch}}* - _{{slack.release}}_");
+set('slack_success_text', "*{{user.name}}* _<{{user.email}}>_ has deployed successfully!\nTarget: *{{target}}*\nRelease: *{{branch}}* - _{{release.summary}}_");
 after('success', 'slack:notify:success');

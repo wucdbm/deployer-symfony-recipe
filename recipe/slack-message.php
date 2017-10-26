@@ -37,7 +37,7 @@ task('slack:notify', function () {
             [
                 'title'    => 'Deployment initiated',
                 'fallback' => 'Deployment initiated',
-                'text'     => parse("{{user.name}} <{{user.email}}> has initiated a deployment\nTarget: {{target}}\nRelease: {{branch}} - {{slack.release}}"),
+                'text'     => parse("{{user.name}} <{{user.email}}> has initiated a deployment\nTarget: {{target}}\nRelease: {{branch}} - {{release.summary}}"),
                 'color'    => get('slack_color')
             ],
         ],
@@ -57,7 +57,7 @@ task('slack:notify:success', function () {
     $user = get('user.name');
     $email = get('user.email');
     $branch = get('branch');
-    $release = get('slack.release');
+    $release = get('release.summary');
 
     $config = [
         'channel'     => '#general',
