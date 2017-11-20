@@ -21,3 +21,7 @@ For cgi-fcgi (used by the opcache clear script) to work, the below package needs
 ```
 apt-get install libfcgi0ldbl
 ```
+
+# TODOs
+
+- Slack or System message upon failure
