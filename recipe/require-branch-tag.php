@@ -115,8 +115,8 @@ task('deploy:before', function () {
     $git = trim(runLocally('which git'));
     $email = trim(runLocally($git . ' config --get user.email'));
     set('user.email', $email);
-    $user = trim(runLocally($git . ' config --get user.name'));
-    set('user.name', $user);
+    $username = trim(runLocally($git . ' config --get user.name'));
+    set('user.name', $username);
 
     // Slack BC
     $revision = trim(runLocally('git log -n 1 --format="%h"'));
