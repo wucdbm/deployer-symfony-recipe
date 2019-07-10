@@ -47,7 +47,7 @@ task('notification:system', function () use ($start) {
         sprintf('Total Time Elapsed: %sm %ss', $diff->i, $diff->s)
     ];
     exec(sprintf('export DISPLAY=:0; notify-send "%s" "%s"', $title, implode("\n", $messages)));
-});
+})->local()->once();
 
 after('success', 'notification:system');
 
