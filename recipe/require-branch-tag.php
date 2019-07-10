@@ -43,7 +43,7 @@ task('notification:system', function () use ($start) {
     $diff = $end->diff($start);
     $title = sprintf('Successfully deployed to %s!', get('hostname'));
     $messages = [
-        sprintf('Successfully deployed %s (%s) to %s!', get('branch'), get('release.summary'), get('hostname')),
+        sprintf('Successfully deployed %s to %s!', get('branch'), get('hostname')),
         sprintf('Total Time Elapsed: %sm %ss', $diff->i, $diff->s)
     ];
     exec(sprintf('export DISPLAY=:0; notify-send "%s" "%s"', $title, implode("\n", $messages)));
