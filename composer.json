@@ -21,7 +21,7 @@
     "minimum-stability": "stable",
     "require": {
         "php": ">=7.1.0",
-        "deployer/deployer": "~6.0"
+        "deployer/deployer": ">=7.0-beta"
     },
     "autoload": {
         "files": [
